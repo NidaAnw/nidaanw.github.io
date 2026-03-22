@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nida Anwar — UX Researcher & Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ivory:#faf8f4;--sand:#f0ebe1;--linen:#e8e1d5;--stone:#c4b9a8;
+  --mink:#8a7d6e;--bark:#3d3229;--forest:#2c4a3e;--forest-l:#3d6b5a;
+  --blush:#d4a9a0;--rose:#b07a72;--gold:#c9a96e;
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Jost',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--ivory);color:var(--bark);font-family:var(--sans);font-weight:300;overflow-x:hidden;cursor:none}
+
+#neural-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.06}
+
+.cursor{width:8px;height:8px;background:var(--forest);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transition:background 0.3s}
+.cursor-trail{width:28px;height:28px;border:1px solid var(--forest);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;opacity:0.5;transition:width 0.3s,height 0.3s,opacity 0.3s,border-color 0.3s}
+body.hov .cursor-trail{width:52px;height:52px;opacity:0.9;border-color:var(--rose)}
+body.hov .cursor{background:var(--rose)}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:28px 56px;display:flex;align-items:center;justify-content:space-between;background:rgba(250,248,244,0.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--linen);animation:fadeD 0.9s ease both}
+@keyframes fadeD{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+.nav-logo{font-family:var(--serif);font-size:20px;font-weight:300;letter-spacing:0.1em;text-transform:uppercase;color:var(--bark);text-decoration:none}
+.nav-logo em{font-style:italic;color:var(--forest)}
+.nav-links{display:flex;gap:40px;list-style:none}
+.nav-links a{font-size:10.5px;font-weight:400;letter-spacing:0.22em;text-transform:uppercase;color:var(--mink);text-decoration:none;transition:color 0.25s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1px;background:var(--forest);transform:scaleX(0);transition:transform 0.3s}
+.nav-links a:hover{color:var(--forest)}
+.nav-links a:hover::after{transform:scaleX(1)}
+
+#hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden}
+.hero-l{padding:140px 56px 100px;position:relative;z-index:2}
+.hero-eyebrow{display:flex;align-items:center;gap:16px;font-size:10px;font-weight:400;letter-spacing:0.28em;text-transform:uppercase;color:var(--forest);margin-bottom:36px;animation:fadeU 1s 0.3s both}
+.hero-eyebrow::before{content:'';width:44px;height:1px;background:var(--forest)}
+h1.hname{font-family:var(--serif);font-size:clamp(58px,6.5vw,96px);font-weight:300;line-height:0.94;letter-spacing:-0.01em;color:var(--bark);animation:fadeU 1s 0.45s both}
+h1.hname em{font-style:italic;color:var(--forest);display:block}
+.hero-desc-tag{font-family:var(--serif);font-size:17px;font-weight:300;font-style:italic;color:var(--mink);margin-top:18px;animation:fadeU 1s 0.58s both}
+.hero-bio{max-width:400px;font-size:14px;line-height:1.9;color:var(--mink);margin-top:32px;font-weight:300;animation:fadeU 1s 0.7s both}
+.hero-bio strong{color:var(--bark);font-weight:400}
+.hero-bio em{font-style:italic;color:var(--forest)}
+.hero-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:30px;animation:fadeU 1s 0.82s both}
+.pill{font-size:9.5px;font-weight:400;letter-spacing:0.18em;text-transform:uppercase;padding:7px 16px;border:1px solid var(--linen);color:var(--mink)}
+.pill.g{border-color:var(--forest);color:var(--forest)}
+.hero-cta{display:flex;gap:14px;margin-top:40px;animation:fadeU 1s 0.95s both}
+.btn-d{display:inline-flex;align-items:center;gap:10px;background:var(--bark);color:var(--ivory);font-size:10px;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;padding:15px 32px;text-decoration:none;border:1px solid var(--bark);transition:all 0.3s}
+.btn-d:hover{background:var(--forest);border-color:var(--forest)}
+.btn-g{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--bark);font-size:10px;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;padding:15px 32px;text-decoration:none;border:1px solid var(--linen);transition:all 0.3s}
+.btn-g:hover{border-color:var(--bark)}
+
+.hero-r{position:relative;height:100vh;overflow:hidden;background:var(--sand)}
+.hero-r-in{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:60px 48px;animation:fadeU 1.2s 0.5s both}
+.h-stat{padding:28px 0;border-bottom:1px solid var(--linen);display:flex;align-items:baseline;justify-content:space-between}
+.h-stat:last-of-type{border-bottom:none}
+.h-num{font-family:var(--serif);font-size:52px;font-weight:300;color:var(--bark);line-height:1}
+.h-num sup{font-size:22px;color:var(--forest)}
+.h-lbl{font-size:10px;font-weight:400;letter-spacing:0.18em;text-transform:uppercase;color:var(--mink);text-align:right;max-width:130px;line-height:1.5}
+.h-loc{margin-top:36px;padding-top:28px;border-top:1px solid var(--linen);display:flex;align-items:center;gap:12px}
+.h-loc-dot{width:8px;height:8px;background:var(--forest);border-radius:50%;animation:pulse 2.5s ease infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(44,74,62,0.4)}50%{box-shadow:0 0 0 8px rgba(44,74,62,0)}}
+.h-loc-txt{font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--mink)}
+.h-loc-txt strong{color:var(--forest);font-weight:400}
+
+@keyframes fadeU{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+.marquee-strip{background:var(--forest);padding:14px 0;overflow:hidden;position:relative;z-index:2}
+.marquee-track{display:flex;width:max-content;animation:mq 30s linear infinite}
+.m-item{font-size:10px;font-weight:400;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.5);padding:0 44px;white-space:nowrap}
+.m-item span{color:var(--gold);margin-right:10px}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+section{padding:112px 56px;position:relative;z-index:1}
+.sec-lbl{display:flex;align-items:center;gap:18px;font-size:10px;font-weight:400;letter-spacing:0.26em;text-transform:uppercase;color:var(--forest);margin-bottom:14px}
+.sec-lbl::before{content:'';width:30px;height:1px;background:var(--forest)}
+.sec-h{font-family:var(--serif);font-size:clamp(40px,5vw,68px);font-weight:300;letter-spacing:-0.01em;line-height:1;color:var(--bark);margin-bottom:64px}
+.sec-h em{font-style:italic;color:var(--forest)}
+
+/* ABOUT */
+#about{background:var(--sand)}
+.about-grid{display:grid;grid-template-columns:5fr 4fr;gap:88px;align-items:start}
+.about-text p{font-size:16px;line-height:1.9;color:var(--bark);font-weight:300;margin-bottom:20px;opacity:0.85}
+.about-text p strong{font-weight:400;opacity:1}
+.about-text p em{font-style:italic;color:var(--forest)}
+.about-pq{font-family:var(--serif);font-size:22px;font-weight:300;font-style:italic;line-height:1.6;color:var(--bark);border-left:2px solid var(--gold);padding-left:28px;margin:40px 0}
+.interests-wrap{margin-top:44px}
+.interests-ttl{font-size:10px;font-weight:400;letter-spacing:0.22em;text-transform:uppercase;color:var(--mink);margin-bottom:18px}
+.interests-chips{display:flex;flex-wrap:wrap;gap:9px}
+.i-chip{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:300;letter-spacing:0.04em;padding:9px 17px;border:1px solid var(--linen);color:var(--mink);background:var(--ivory)}
+
+.neuro-block{background:var(--bark);color:var(--ivory);padding:40px 36px;margin-bottom:20px}
+.neuro-block-lbl{font-size:9px;font-weight:400;letter-spacing:0.26em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.neuro-block-lbl::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.12)}
+.neuro-block h3{font-family:var(--serif);font-size:27px;font-weight:300;font-style:italic;line-height:1.4;color:var(--ivory);margin-bottom:14px}
+.neuro-block p{font-size:13px;line-height:1.8;color:rgba(255,255,255,0.6);font-weight:300}
+.neuro-date{margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.1);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold)}
+
+.tools-card{background:var(--ivory);border:1px solid var(--linen);padding:30px 26px}
+.tools-ttl{font-size:10px;font-weight:400;letter-spacing:0.22em;text-transform:uppercase;color:var(--mink);margin-bottom:18px}
+.tool-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--linen)}
+.tool-row:last-child{border-bottom:none}
+.tool-nm{font-size:13px;font-weight:300;color:var(--bark)}
+.tool-cat{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone)}
+
+/* WORK */
+#work{background:var(--ivory)}
+.proj-stack{display:flex;flex-direction:column;gap:2px}
+.proj-row{display:grid;grid-template-columns:56px 1fr auto;gap:40px;align-items:center;padding:36px 40px;background:var(--sand);border:1px solid var(--linen);text-decoration:none;color:inherit;cursor:none;transition:background 0.3s;position:relative;overflow:hidden}
+.proj-row::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--forest),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform 0.4s}
+.proj-row:hover{background:var(--linen)}
+.proj-row:hover::after{transform:scaleX(1)}
+.proj-n{font-family:var(--serif);font-size:42px;font-weight:300;color:var(--stone);line-height:1;transition:color 0.3s}
+.proj-row:hover .proj-n{color:var(--forest)}
+.proj-tags{display:flex;gap:8px;margin-bottom:9px;flex-wrap:wrap}
+.ptag{font-size:9px;font-weight:400;letter-spacing:0.16em;text-transform:uppercase;padding:4px 11px;border:1px solid var(--linen);color:var(--mink)}
+.pnda{display:inline-flex;align-items:center;gap:5px;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+.proj-name{font-family:var(--serif);font-size:28px;font-weight:300;letter-spacing:-0.01em;color:var(--bark);margin-bottom:7px;transition:color 0.3s}
+.proj-name em{font-style:italic;color:var(--forest)}
+.proj-row:hover .proj-name{color:var(--forest)}
+.proj-desc{font-size:13px;line-height:1.7;color:var(--mink);font-weight:300}
+.proj-aside{text-align:right;flex-shrink:0}
+.proj-dur{font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone);display:block;margin-bottom:8px}
+.proj-arr{font-size:20px;color:var(--stone);display:block;transition:transform 0.3s,color 0.3s}
+.proj-row:hover .proj-arr{transform:translateX(6px);color:var(--forest)}
+
+.case-panel{display:none;padding:80px 56px;background:var(--ivory);border:1px solid var(--linen);border-top:3px solid var(--forest);animation:fadeU 0.5s ease both}
+.case-panel.open{display:block}
+.cs-close-btn{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:400;letter-spacing:0.18em;text-transform:uppercase;color:var(--mink);background:none;border:1px solid var(--linen);padding:10px 20px;cursor:none;transition:all 0.25s;margin-bottom:52px}
+.cs-close-btn:hover{background:var(--bark);color:var(--ivory);border-color:var(--bark)}
+.cs-top{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:start;padding-bottom:52px;border-bottom:1px solid var(--linen);margin-bottom:60px}
+.cs-title{font-family:var(--serif);font-size:clamp(42px,5.5vw,70px);font-weight:300;line-height:0.95;letter-spacing:-0.02em;color:var(--bark)}
+.cs-title em{font-style:italic;color:var(--forest);display:block}
+.cs-sub{font-size:15px;line-height:1.8;color:var(--mink);font-weight:300;max-width:490px;margin-top:18px}
+.cs-specs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--linen);border:1px solid var(--linen);min-width:250px;align-self:start}
+.cs-spec{background:var(--ivory);padding:18px 20px}
+.cs-spec-k{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);display:block;margin-bottom:4px}
+.cs-spec-v{font-size:13px;color:var(--bark);font-weight:300}
+.cs-body{display:grid;grid-template-columns:3fr 2fr;gap:64px}
+.cs-chunk{margin-bottom:52px}
+.cs-chunk-lbl{font-size:9px;font-weight:400;letter-spacing:0.24em;text-transform:uppercase;color:var(--forest);margin-bottom:16px;display:flex;align-items:center;gap:14px}
+.cs-chunk-lbl::after{content:'';flex:1;height:1px;background:var(--linen)}
+.cs-chunk h3{font-family:var(--serif);font-size:25px;font-weight:300;font-style:italic;color:var(--bark);margin-bottom:16px}
+.cs-chunk p{font-size:15px;line-height:1.85;color:var(--bark);opacity:0.8;font-weight:300;margin-bottom:14px}
+.cs-quote{background:var(--sand);border-left:3px solid var(--gold);padding:26px 30px;margin:24px 0;font-family:var(--serif);font-size:19px;font-style:italic;font-weight:300;line-height:1.6;color:var(--bark)}
+.cs-quote cite{display:block;margin-top:10px;font-size:10px;font-style:normal;letter-spacing:0.14em;text-transform:uppercase;color:var(--mink)}
+.cs-steps{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.cs-step{display:grid;grid-template-columns:34px 1fr;gap:18px;padding:20px 22px;background:var(--sand);border:1px solid var(--linen);align-items:start}
+.cs-step-n{font-family:var(--serif);font-size:30px;font-weight:300;color:var(--forest);line-height:1}
+.cs-step-b strong{display:block;font-size:14px;font-weight:400;color:var(--bark);margin-bottom:4px}
+.cs-step-b p{font-size:13px;line-height:1.7;color:var(--mink);font-weight:300}
+.cs-impact{background:var(--forest);color:var(--ivory);padding:34px 38px}
+.cs-impact-lbl{font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.cs-impact p{font-size:14px;line-height:1.8;color:rgba(255,255,255,0.72);font-weight:300}
+.sc{background:var(--sand);border:1px solid var(--linen);padding:26px 22px;margin-bottom:14px}
+.sc h4{font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--mink);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--linen)}
+.sc ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.sc li{font-size:13px;line-height:1.6;color:var(--bark);font-weight:300;padding-left:16px;position:relative}
+.sc li::before{content:'—';position:absolute;left:0;color:var(--gold)}
+.sc p{font-size:13px;line-height:1.7;color:var(--mink);font-weight:300}
+
+/* RESUME */
+#resume{background:var(--bark);color:var(--ivory)}
+#resume .sec-lbl{color:var(--gold)}
+#resume .sec-lbl::before{background:var(--gold)}
+#resume .sec-h{color:var(--ivory)}
+#resume .sec-h em{color:var(--gold)}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px}
+.res-col-h{font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:36px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.res-job{margin-bottom:40px}
+.res-job-hd{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:5px}
+.res-role{font-family:var(--serif);font-size:20px;font-weight:300;color:var(--ivory)}
+.res-dates{font-size:10px;letter-spacing:0.12em;color:rgba(255,255,255,0.3);white-space:nowrap}
+.res-org{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.res-bul{list-style:none;display:flex;flex-direction:column;gap:7px}
+.res-bul li{font-size:13px;line-height:1.7;color:rgba(255,255,255,0.52);font-weight:300;padding-left:18px;position:relative}
+.res-bul li::before{content:'—';position:absolute;left:0;color:var(--gold)}
+.res-edu{padding:22px 0;border-bottom:1px solid rgba(255,255,255,0.06)}
+.res-edu:last-of-type{border-bottom:none}
+.res-deg{font-family:var(--serif);font-size:19px;font-weight:300;color:var(--ivory);margin-bottom:4px}
+.res-school{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold)}
+.res-yr{font-size:10px;color:rgba(255,255,255,0.28);margin-top:3px;letter-spacing:0.06em}
+.skills-wrap{margin-top:44px}
+.skills-g{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:18px}
+.sk{font-size:11px;font-weight:300;letter-spacing:0.06em;padding:11px 13px;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.55);transition:all 0.25s}
+.sk:hover{border-color:var(--gold);color:var(--ivory)}
+.res-dl{display:inline-flex;align-items:center;gap:10px;background:var(--forest);color:var(--ivory);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:15px 32px;text-decoration:none;border:1px solid var(--forest);margin-top:40px;transition:all 0.3s}
+.res-dl:hover{background:transparent;border-color:rgba(255,255,255,0.25)}
+
+/* CONTACT */
+#contact{background:var(--sand)}
+.con-grid{display:grid;grid-template-columns:1fr 1fr;gap:88px;align-items:start}
+.con-intro{font-family:var(--serif);font-size:clamp(21px,2.5vw,29px);font-weight:300;font-style:italic;line-height:1.55;color:var(--bark);margin-bottom:36px}
+.con-intro strong{font-style:normal;font-weight:400;color:var(--forest)}
+.con-link{display:flex;align-items:center;gap:18px;text-decoration:none;color:var(--bark);padding:19px 0;border-bottom:1px solid var(--linen);transition:color 0.25s}
+.con-link:hover{color:var(--forest)}
+.con-lbl{font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--stone);min-width:68px}
+.con-val{font-size:14px;font-weight:300}
+.con-form{display:flex;flex-direction:column;gap:20px}
+.ff{display:flex;flex-direction:column;gap:8px}
+.ff label{font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--mink)}
+.ff input,.ff textarea{background:var(--ivory);border:1px solid var(--linen);color:var(--bark);font-family:var(--sans);font-size:14px;font-weight:300;padding:14px 17px;outline:none;resize:none;cursor:none;transition:border-color 0.25s}
+.ff input:focus,.ff textarea:focus{border-color:var(--forest)}
+.ff textarea{height:118px}
+.con-btn{align-self:flex-start;background:var(--bark);color:var(--ivory);font-family:var(--sans);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:15px 36px;border:1px solid var(--bark);cursor:none;transition:all 0.3s}
+.con-btn:hover{background:var(--forest);border-color:var(--forest)}
+
+footer{padding:36px 56px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--linen);background:var(--ivory)}
+.f-sig{font-family:var(--serif);font-size:18px;font-weight:300;font-style:italic;color:var(--bark)}
+.f-copy{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--stone)}
+
+/* PASSWORD MODAL */
+.pw-ov{display:none;position:fixed;inset:0;background:rgba(61,50,41,0.72);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(10px)}
+.pw-box{background:var(--ivory);border:1px solid var(--linen);padding:56px 48px;width:100%;max-width:420px;position:relative}
+.pw-x{position:absolute;top:20px;right:24px;background:none;border:none;cursor:none;font-size:18px;color:var(--stone);transition:color 0.2s}
+.pw-x:hover{color:var(--bark)}
+.pw-kicker{font-family:var(--serif);font-size:13px;font-weight:300;font-style:italic;color:var(--forest);letter-spacing:0.06em;margin-bottom:18px}
+.pw-h{font-family:var(--serif);font-size:34px;font-weight:300;color:var(--bark);letter-spacing:-0.01em;margin-bottom:8px}
+.pw-sub{font-size:12px;letter-spacing:0.08em;line-height:1.75;color:var(--mink);margin-bottom:34px;font-weight:300}
+.pw-inp{width:100%;background:var(--sand);border:1px solid var(--linen);color:var(--bark);font-family:var(--sans);font-size:14px;font-weight:300;padding:14px 17px;outline:none;cursor:none;letter-spacing:0.1em;transition:border-color 0.25s}
+.pw-inp:focus{border-color:var(--forest)}
+.pw-err{font-size:11px;letter-spacing:0.08em;color:var(--rose);margin-top:9px;opacity:0;transition:opacity 0.3s;min-height:16px}
+.pw-btns{display:flex;gap:10px;margin-top:22px}
+.pw-ok{flex:1;background:var(--bark);color:var(--ivory);font-family:var(--sans);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:14px;border:1px solid var(--bark);cursor:none;transition:all 0.25s}
+.pw-ok:hover{background:var(--forest);border-color:var(--forest)}
+.pw-cn{background:transparent;color:var(--mink);font-family:var(--sans);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:14px 20px;border:1px solid var(--linen);cursor:none;transition:all 0.25s}
+.pw-cn:hover{border-color:var(--bark);color:var(--bark)}
+
+.reveal{opacity:0;transform:translateY(22px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal.visible{opacity:1;transform:none}
+.rd1{transition-delay:0.1s}.rd2{transition-delay:0.2s}.rd3{transition-delay:0.3s}
+
+@media(max-width:960px){
+  nav{padding:20px 24px}
+  .nav-links{gap:20px}
+  #hero{grid-template-columns:1fr;min-height:auto}
+  .hero-l{padding:110px 24px 48px}
+  .hero-r{height:auto}.hero-r-in{position:relative;padding:44px 24px}
+  section{padding:72px 24px}
+  .about-grid,.res-grid,.con-grid,.cs-body,.cs-top{grid-template-columns:1fr;gap:44px}
+  .proj-row{grid-template-columns:44px 1fr;gap:18px}
+  .proj-aside{display:none}
+  .case-panel{padding:44px 24px}
+  footer{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<canvas id="neural-canvas"></canvas>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+
+<!-- PASSWORD MODAL -->
+<div class="pw-ov" id="pw-ov">
+  <div class="pw-box">
+    <button class="pw-x" onclick="closePw()">✕</button>
+    <div class="pw-kicker">— NDA Protected Work</div>
+    <div class="pw-h">Password Required</div>
+    <div class="pw-sub">This case study contains confidential research conducted under NDA at Kabam. Please enter the password to access.</div>
+    <input class="pw-inp" id="pw-inp" type="password" placeholder="Enter password" />
+    <div class="pw-err" id="pw-err">Incorrect password. Please try again.</div>
+    <div class="pw-btns">
+      <button class="pw-ok" onclick="checkPw()">Unlock →</button>
+      <button class="pw-cn" onclick="closePw()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero">Nida <em>Anwar</em></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#resume">Résumé</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-l">
+    <div class="hero-eyebrow">UX Research &amp; Design</div>
+    <h1 class="hname">Nida<em>Anwar.</em></h1>
+    <p class="hero-desc-tag">Cognitive Science · Human Behaviour · Neurotechnology</p>
+    <p class="hero-bio">
+      I design research that gets to the <strong>why</strong> — bridging cognitive science, neuroscience, and human-centred design to build experiences that genuinely matter. Based in <em>Vancouver, BC</em>. Seeking my next role in big tech or neurotechnology.
+    </p>
+    <div class="hero-pills">
+      <div class="pill g">BCI / HCI</div>
+      <div class="pill g">UX Research</div>
+      <div class="pill">MSc Neuroscience · SFU '26</div>
+      <div class="pill">EEG · Eye Tracking</div>
+      <div class="pill">Figma · Miro</div>
+    </div>
+    <div class="hero-cta">
+      <a href="#work" class="btn-d">View Work →</a>
+      <a href="#contact" class="btn-g">Say Hello</a>
+    </div>
+  </div>
+  <div class="hero-r">
+    <div class="hero-r-in">
+      <div class="h-stat"><div class="h-num">3<sup>+</sup></div><div class="h-lbl">Years in UX Research & Design</div></div>
+      <div class="h-stat"><div class="h-num">21</div><div class="h-lbl">Research Interviews Conducted</div></div>
+      <div class="h-stat"><div class="h-num">2</div><div class="h-lbl">Industry Co-ops Completed</div></div>
+      <div class="h-stat"><div class="h-num">6<sup>+</sup></div><div class="h-lbl">End-to-End Projects</div></div>
+      <div class="h-loc">
+        <div class="h-loc-dot"></div>
+        <div class="h-loc-txt">Based in <strong>Vancouver, BC</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <div class="m-item"><span>✦</span>UX Research</div>
+    <div class="m-item"><span>✦</span>Cognitive Science</div>
+    <div class="m-item"><span>✦</span>Neurotechnology</div>
+    <div class="m-item"><span>✦</span>BCI · HCI</div>
+    <div class="m-item"><span>✦</span>Behavioural Design</div>
+    <div class="m-item"><span>✦</span>EEG & Eye Tracking</div>
+    <div class="m-item"><span>✦</span>Player Behaviour</div>
+    <div class="m-item"><span>✦</span>Figma Prototyping</div>
+    <div class="m-item"><span>✦</span>Vancouver 🏔</div>
+    <div class="m-item"><span>✦</span>Matcha Enthusiast 🍵</div>
+    <div class="m-item"><span>✦</span>UX Research</div>
+    <div class="m-item"><span>✦</span>Cognitive Science</div>
+    <div class="m-item"><span>✦</span>Neurotechnology</div>
+    <div class="m-item"><span>✦</span>BCI · HCI</div>
+    <div class="m-item"><span>✦</span>Behavioural Design</div>
+    <div class="m-item"><span>✦</span>EEG & Eye Tracking</div>
+    <div class="m-item"><span>✦</span>Player Behaviour</div>
+    <div class="m-item"><span>✦</span>Figma Prototyping</div>
+    <div class="m-item"><span>✦</span>Vancouver 🏔</div>
+    <div class="m-item"><span>✦</span>Matcha Enthusiast 🍵</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="sec-lbl">01 — About</div>
+  <h2 class="sec-h">The person<br><em>behind the research</em></h2>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>I'm a <strong>Cognitive Science graduate from Simon Fraser University</strong> with a deep fascination for how the brain shapes the way we interact with technology. My work lives at the intersection of behavioural research, neuroscience, and design — and I believe the most impactful products are built by people who genuinely understand <em>why humans do what they do.</em></p>
+      <p>Most recently, I completed a co-op as a <strong>User Researcher at Kabam</strong>, a Vancouver-based mobile gaming studio, where I ran end-to-end research for multiple live game titles. Before that, I spent time as a Research Assistant in the <strong>Spalek Lab at SFU</strong>, working directly with EEG and eye-tracking tools to study attention and cognitive processes.</p>
+      <p>I apply <strong>neuroscience and psychology principles</strong> as a compass in every project I take on. It grounds the work in how people actually think and feel — making it more honest, more human, and more likely to create real change.</p>
+
+      <div class="about-pq">"I use neuroscience and psychology as my design compass. It makes the work more honest — more human."</div>
+
+      <p>I'm drawn to work with real stakes. That's why <strong>neurotechnology and BCI</strong> feel like the most exciting frontier I can imagine — and why I'll be starting my <strong>MSc in Neuroscience at SFU in September 2026</strong>. The brain is the most complex interface ever built, and I want to design for it.</p>
+
+      <div class="interests-wrap">
+        <div class="interests-ttl">Outside the lab & studio</div>
+        <div class="interests-chips">
+          <div class="i-chip"><span>🏔</span> Hiking BC trails</div>
+          <div class="i-chip"><span>⛷</span> Skiing Whistler</div>
+          <div class="i-chip"><span>🧘</span> Pilates</div>
+          <div class="i-chip"><span>🌊</span> Ocean walks</div>
+          <div class="i-chip"><span>📷</span> Photography</div>
+          <div class="i-chip"><span>✈️</span> Travelling the world</div>
+          <div class="i-chip"><span>🌅</span> Chasing sunsets</div>
+          <div class="i-chip"><span>🍵</span> Matcha everything</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="neuro-block reveal rd1">
+        <div class="neuro-block-lbl">Next Chapter</div>
+        <h3>The brain is the most complex interface ever built.</h3>
+        <p>My goal is to design technology that works with it — not against it. BCI represents the most human-centred design challenge imaginable: every decision must be grounded in how the nervous system actually works. That's where I'm headed.</p>
+        <div class="neuro-date">📅 MSc Neuroscience · SFU · September 2026</div>
+      </div>
+      <div class="tools-card reveal rd2">
+        <div class="tools-ttl">Tools & Methods</div>
+        <div class="tool-row"><span class="tool-nm">Figma</span><span class="tool-cat">Design</span></div>
+        <div class="tool-row"><span class="tool-nm">Miro</span><span class="tool-cat">Research</span></div>
+        <div class="tool-row"><span class="tool-nm">Adobe Suite</span><span class="tool-cat">Design</span></div>
+        <div class="tool-row"><span class="tool-nm">UserTesting</span><span class="tool-cat">Research</span></div>
+        <div class="tool-row"><span class="tool-nm">EEG Tools</span><span class="tool-cat">Neuro</span></div>
+        <div class="tool-row"><span class="tool-nm">Eye Tracking</span><span class="tool-cat">Neuro</span></div>
+        <div class="tool-row"><span class="tool-nm">Python · R · Matlab</span><span class="tool-cat">Analysis</span></div>
+        <div class="tool-row"><span class="tool-nm">SurveyMonkey · Excel</span><span class="tool-cat">Research</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work">
+  <div class="sec-lbl">02 — Selected Work</div>
+  <h2 class="sec-h">Projects built on<br><em>real research</em></h2>
+  <div class="proj-stack">
+
+    <!-- KABAM -->
+    <a class="proj-row reveal" href="#" onclick="handleKabam();return false;">
+      <div class="proj-n">01</div>
+      <div>
+        <div class="pnda">🔒 NDA Protected</div>
+        <div class="proj-tags"><span class="ptag">UX Research</span><span class="ptag">Mobile Gaming</span><span class="ptag">Quantitative</span></div>
+        <div class="proj-name">Kabam — <em>Player Research Co-op</em></div>
+        <div class="proj-desc">End-to-end UX research for live mobile game titles at a Vancouver AAA studio. Surveys, playtests, NPS, and stakeholder reporting.</div>
+      </div>
+      <div class="proj-aside"><span class="proj-dur">Jan – Apr 2026</span><span class="proj-arr">→</span></div>
+    </a>
+    <div class="case-panel" id="panel-kabam">
+      <button class="cs-close-btn" onclick="closePanel('kabam')">← Back to Work</button>
+      <div class="cs-top">
+        <div>
+          <div class="cs-title">Kabam<em>Player Research</em></div>
+          <p class="cs-sub">A 4-month co-op embedded within the UX research team at Kabam — a Vancouver studio known for Marvel Contest of Champions and other top-grossing mobile titles.</p>
+        </div>
+        <div class="cs-specs">
+          <div class="cs-spec"><span class="cs-spec-k">Role</span><span class="cs-spec-v">User Researcher</span></div>
+          <div class="cs-spec"><span class="cs-spec-k">Duration</span><span class="cs-spec-v">4 months</span></div>
+          <div class="cs-spec"><span class="cs-spec-k">Methods</span><span class="cs-spec-v">Survey · Playtest</span></div>
+          <div class="cs-spec"><span class="cs-spec-k">Output</span><span class="cs-spec-v">Stakeholder Reports</span></div>
+        </div>
+      </div>
+      <div class="cs-body">
+        <div>
+          <div class="cs-chunk">
+            <div class="cs-chunk-lbl">Overview</div>
+            <h3>Understanding what keeps players coming back</h3>
+            <p>At Kabam I joined the UX research team to investigate pressing questions in mobile gaming: why do players churn? What drives session length? How do new feature releases land across different player segments? I owned end-to-end research — from designing instruments and recruiting participants through to synthesizing findings and presenting to stakeholders.</p>
+          </div>
+          <div class="cs-chunk">
+            <div class="cs-chunk-lbl">Process</div>
+            <h3>Four research pillars</h3>
+            <div class="cs-steps">
+              <div class="cs-step"><div class="cs-step-n">1</div><div class="cs-step-b"><strong>Survey Design & Deployment</strong><p>Large-scale survey instruments targeting specific player segments, balancing depth with completion rates.</p></div></div>
+              <div class="cs-step"><div class="cs-step-n">2</div><div class="cs-step-b"><strong>Moderated Playtests</strong><p>Remote and in-person sessions observing behaviour in real time, probing motivation through follow-up questions.</p></div></div>
+              <div class="cs-step"><div class="cs-step-n">3</div><div class="cs-step-b"><strong>Metric Analysis</strong><p>NPS calculation and quantitative synthesis against qualitative themes to build a complete picture of player sentiment.</p></div></div>
+              <div class="cs-step"><div class="cs-step-n">4</div><div class="cs-step-b"><strong>Stakeholder Reporting</strong><p>Narrative-driven reports and presentation decks tailored for PMs, designers, and senior leadership.</p></div></div>
+            </div>
+          </div>
+          <div class="cs-quote">"Players don't churn because the game is hard. They churn when they can't see the path forward — when progress feels invisible."<cite>— Key insight from playtest synthesis</cite></div>
+          <div class="cs-chunk">
+            <div class="cs-chunk-lbl">Impact</div>
+            <h3>Research that moved the roadmap</h3>
+            <p>My insights were directly incorporated into design briefs, with specific friction points in new player onboarding prioritized for UI changes. Recruitment systems I introduced improved session scheduling efficiency across ongoing studies.</p>
+          </div>
+        </div>
+        <div>
+          <div class="sc"><h4>Deliverables</h4><ul><li>Multi-wave survey instruments</li><li>Moderated playtest protocols</li><li>NPS analysis reports</li><li>Executive stakeholder decks</li><li>Participant recruitment system</li></ul></div>
+          <div class="sc"><h4>Skills Applied</h4><ul><li>Quant & qual synthesis</li><li>Participant recruitment</li><li>Behavioural observation</li><li>Data analysis (Excel)</li><li>Stakeholder communication</li></ul></div>
+          <div class="sc"><h4>Context</h4><p>With tens of millions of players across their titles, research at Kabam operates at genuine scale. Every insight had measurable downstream effects on engagement and retention.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CENTRO -->
+    <a class="proj-row reveal rd1" href="#" onclick="togglePanel('centro');return false;">
+      <div class="proj-n">02</div>
+      <div>
+        <div class="proj-tags"><span class="ptag">UX Design</span><span class="ptag">FinTech</span><span class="ptag">Behavioural Design</span></div>
+        <div class="proj-name">Centro — <em>Budgeting App</em></div>
+        <div class="proj-desc">Redesigning how Gen-Z relates to money — using Spotify Wrapped-style storytelling and psychology-backed behavioural nudges to make financial literacy feel less painful.</div>
+      </div>
+      <div class="proj-aside"><span class="proj-dur">4 Weeks · 2022</span><span class="proj-arr">→</span></div>
+    </a>
+    <div class="case-panel" id="panel-centro">
+      <button class="cs-close-btn" onclick="closePanel('centro')">← Back to Work</button>
+      <div class="cs-top">
+        <div>
+          <div class="cs-title">Centro<em>Budgeting App</em></div>
+          <p class="cs-sub">A 4-week sprint for a social budgeting startup. My challenge: make a 32-year-old woman actually want to open her budgeting app. The insight that drove everything came from behavioural psychology.</p>
+        </div>
+        <div class="cs-specs">
+          <div class="cs-spec"><span class="cs-spec-k">Role</span><span class="cs-spec-v">UX Designer</span></div>
+          <div class="cs-spec"><span class="cs-spec-k">Duration</span><span class="cs-spec-v">4 weeks</span></div>
+          <div class="cs-spec"><span class="cs-spec-k">Team</span><span class="cs-spec-v">2 UX · 2 PM</span></div>
+          <div class="cs-spec"><span class="cs-spec-k">Tools</span><span class="cs-spec-v">Figma · Miro · Adobe</span></div>
+        </div>
+      </div>
+      <div class="cs-body">
+        <div>
+          <div class="cs-chunk">
+            <div class="cs-chunk-lbl">The Problem</div>
+            <h3>Budgeting apps treat anxiety as a feature</h3>
+            <p>The existing budgeting landscape is built around guilt: red numbers, overspending alerts, clinical charts. It's optimized for accountants, not humans. Our persona Samara — a 32-year-old communications analyst saving for a downpayment — said it best:</p>
+          </div>
+          <div class="cs-quote">"Budgeting shouldn't be fun, it should be less painful."<cite>— Samara, primary persona</cite></div>
+          <div class="cs-chunk">
+            <div class="cs-chunk-lbl">Research</div>
+            <h3>21 interviews. 33 surveys. One core insight.</h3>
+            <p>We followed a design thinking approach with a heavy emphasis on the empathy phase. Using principles from cognitive science, I identified the key gap: people are motivated by <strong>prospective thinking</strong> — imagining their future self — far more than reviewing their past. No existing budgeting app was leveraging this.</p>
+          </div>
+          <div class="cs-chunk">
+            <div class="cs-chunk-lbl">Solution</div>
+            <h3>Financial storytelling, not financial tracking</h3>
+            <p>Inspired by Spotify Wrapped and Instagram Stories — and grounded in behavioural psychology — we designed a swipeable monthly "Story" that transforms spending data into a personal narrative. Paired with uplifting, context-aware push notifications, the experience rewards opening the app rather than penalising it.</p>
+          </div>
+          <div class="cs-chunk">
+            <div class="cs-chunk-lbl">Testing</div>
+            <h3>14 participants. Iterated twice.</h3>
+            <p>Usability testing surfaced key friction points: terminology confusion, a preference for income and expenses together, and desire for swipe gestures. We iterated from low to mid fidelity, adding a Category Spend feature and animated goal vision board.</p>
+          </div>
+          <div class="cs-impact">
+            <div class="cs-impact-lbl">Psychology Applied</div>
+            <p>This project is where I first consciously applied psychological principles — specifically prospect theory and temporal motivation theory — to design decisions. Visualizing your future financial self is more motivating than reviewing past spending. It's the same instinct that drives my fascination with BCI and neurotechnology.</p>
+          </div>
+        </div>
+        <div>
+          <div class="sc"><h4>Features Designed</h4><ul><li>Monthly "Story" recap (swipeable)</li><li>Income + expense overview</li><li>Category spend breakdown</li><li>Animated goal vision board</li><li>Uplifting push notifications</li></ul></div>
+          <div class="sc"><h4>Methods</h4><ul><li>21 semi-structured interviews</li><li>33 surveys</li><li>Competitive analysis</li><li>Persona development</li><li>Low–mid fidelity prototyping</li><li>14-person usability test</li></ul></div>
+          <div class="sc"><h4>Psychology Applied</h4><ul><li>Prospect theory</li><li>Temporal motivation theory</li><li>Positive reinforcement design</li><li>Habit loop framework</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GONG CHA -->
+    <a class="proj-row reveal rd2" href="#" onclick="togglePanel('gongcha');return false;">
+      <div class="proj-n">03</div>
+      <div>
+        <div class="proj-tags"><span class="ptag">UX Design</span><span class="ptag">App Redesign</span><span class="ptag">Consumer</span></div>
+        <div class="proj-name">Gong Cha — <em>App Redesign</em></div>
+        <div class="proj-desc">A research-led redesign of the Gong Cha bubble tea app — restructuring navigation, adding drink descriptions, and modernising the interface based on real user research.</div>
+      </div>
+      <div class="proj-aside"><span class="proj-dur">3 Weeks · 2023</span><span class="proj-arr">→</span></div>
+    </a>
+    <div class="case-panel" id="panel-gongcha">
+      <button class="cs-close-btn" onclick="closePanel('gongcha')">← Back to Work</button>
+      <div class="cs-top">
+        <div>
+          <div class="cs-title">Gong Cha<em>App Redesign</em></div>
+          <p class="cs-sub">A 3-week redesign project improving usability, information architecture, and visual language for Gong Cha's mobile ordering app. A personal one — I love bubble tea.</p>
+        </div>
+        <div class="cs-specs">
+          <div class="cs-spec"><span class="cs-spec-k">Role</span><span class="cs-spec-v">UX Designer</span></div>
+          <div class="cs-spec"><span class="cs-spec-k">Duration</span><span class="cs-spec-v">3 weeks</span></div>
+          <div class="cs-spec"><span class="cs-spec-k">Type</span><span class="cs-spec-v">App Redesign</span></div>
+          <div class="cs-spec"><span class="cs-spec-k">Tools</span><span class="cs-spec-v">Figma · Miro · Adobe</span></div>
+        </div>
+      </div>
+      <div class="cs-body">
+        <div>
+          <div class="cs-chunk">
+            <div class="cs-chunk-lbl">The Problem</div>
+            <h3>A great product trapped in a confusing app</h3>
+            <p>Gong Cha's product quality is undeniable — but their app was a cluttered, scrolling menu with no descriptions, no images, no nutritional info, and a frustrating sign-up wall. First-time users were essentially guessing.</p>
+          </div>
+          <div class="cs-quote">"If I was ordering for the first time, I would need more descriptions and pictures. Maybe a carousel so I don't have to scroll so much."<cite>— Interview participant</cite></div>
+          <div class="cs-chunk">
+            <div class="cs-chunk-lbl">Research</div>
+            <h3>12 participants. Competitive benchmarking.</h3>
+            <p>Survey and interview data from 12 participants (ages 18–55) revealed consistent pain points. Competitive analysis of Coco Fresh Tea and Starbucks showed what best-in-class mobile ordering could look like.</p>
+          </div>
+          <div class="cs-chunk">
+            <div class="cs-chunk-lbl">Solution</div>
+            <h3>Clarity, speed, visual delight</h3>
+            <div class="cs-steps">
+              <div class="cs-step"><div class="cs-step-n">1</div><div class="cs-step-b"><strong>Carousel Navigation</strong><p>Category-based carousel reducing cognitive load and eliminating endless scrolling.</p></div></div>
+              <div class="cs-step"><div class="cs-step-n">2</div><div class="cs-step-b"><strong>Rich Drink Cards</strong><p>Ingredient details, flavor descriptions, and size imagery empowering first-time users.</p></div></div>
+              <div class="cs-step"><div class="cs-step-n">3</div><div class="cs-step-b"><strong>Visual Overhaul</strong><p>Clean, warm, image-forward redesign aligned with Gong Cha's brand identity.</p></div></div>
+              <div class="cs-step"><div class="cs-step-n">4</div><div class="cs-step-b"><strong>Streamlined Checkout</strong><p>Simplified order flow with prominent delivery vs. pickup toggle upfront.</p></div></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="sc"><h4>Deliverables</h4><ul><li>Competitive analysis report</li><li>User persona (Sarah, 22)</li><li>Customer journey map</li><li>2 wireframe concepts</li><li>Interactive prototype</li><li>Usability test report</li></ul></div>
+          <div class="sc"><h4>Key Wins</h4><ul><li>Carousel reduced scroll fatigue</li><li>Descriptions improved ordering confidence</li><li>High usability scores on core flows</li></ul></div>
+          <div class="sc"><h4>Next Steps</h4><p>Improve the order-editing flow (50% success rate), add cart quantity adjustment, and run a second round with first-time users specifically.</p></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RESUME -->
+<section id="resume">
+  <div class="sec-lbl">03 — Résumé</div>
+  <h2 class="sec-h">Experience &amp;<br><em>Education</em></h2>
+  <div class="res-grid">
+    <div>
+      <div class="res-col-h">Experience</div>
+      <div class="res-job reveal">
+        <div class="res-job-hd"><div class="res-role">User Researcher Co-op</div><div class="res-dates">Jan – Apr 2026</div></div>
+        <div class="res-org">Kabam · Vancouver, BC</div>
+        <ul class="res-bul"><li>End-to-end research for mobile game titles via surveys, interviews, and playtests</li><li>Calculated NPS and synthesized behavioral data into stakeholder-facing reports</li><li>Managed participant recruitment and led moderated playtest sessions</li></ul>
+      </div>
+      <div class="res-job reveal">
+        <div class="res-job-hd"><div class="res-role">Research Assistant</div><div class="res-dates">2024 – Jul 2025</div></div>
+        <div class="res-org">Spalek Lab · Simon Fraser University</div>
+        <ul class="res-bul"><li>Planned and executed psychological and behavioral research studies</li><li>Hands-on experience with EEG and Eye Tracking for cognitive data collection</li><li>Managed participant recruitment and protocol compliance</li></ul>
+      </div>
+      <div class="res-job reveal">
+        <div class="res-job-hd"><div class="res-role">Project Designer</div><div class="res-dates">Jan – May 2024</div></div>
+        <div class="res-org">Vantedge</div>
+        <ul class="res-bul"><li>User research, customer interviews, and testing for digital products</li><li>Case studies and storyboards translating qualitative data into product narratives</li><li>Collaborated with designers and PMs to keep decisions user-grounded</li></ul>
+      </div>
+      <div class="res-job reveal">
+        <div class="res-job-hd"><div class="res-role">UX Designer Co-op</div><div class="res-dates">Sep – Dec 2022</div></div>
+        <div class="res-org">Centro</div>
+        <ul class="res-bul"><li>Co-designed a budgeting app contributing to UX and interface design</li><li>Conducted user and market research to inform design decisions</li><li>Created storyboards and user flow visualizations</li></ul>
+      </div>
+    </div>
+    <div>
+      <div class="res-col-h">Education</div>
+      <div class="res-edu reveal">
+        <div class="res-deg">MSc Neuroscience <span style="font-size:13px;color:var(--gold);font-style:italic;font-family:var(--serif)"> — Incoming</span></div>
+        <div class="res-school">Simon Fraser University</div>
+        <div class="res-yr">Starting September 2026</div>
+      </div>
+      <div class="res-edu reveal">
+        <div class="res-deg">Bachelor of Cognitive Science</div>
+        <div class="res-school">Simon Fraser University</div>
+        <div class="res-yr">Graduated 2024</div>
+      </div>
+      <div class="res-edu reveal">
+        <div class="res-deg">Applied UX Design Bootcamp</div>
+        <div class="res-school">SAIT — Southern Alberta Institute of Technology</div>
+        <div class="res-yr">2022</div>
+      </div>
+      <div class="skills-wrap">
+        <div class="res-col-h" style="margin-top:44px">Core Skills</div>
+        <div class="skills-g reveal">
+          <div class="sk">Qualitative Research</div><div class="sk">Quantitative Analysis</div>
+          <div class="sk">Usability Testing</div><div class="sk">Survey Design</div>
+          <div class="sk">EEG / Eye Tracking</div><div class="sk">Figma</div>
+          <div class="sk">Behavioural Analysis</div><div class="sk">Stakeholder Reports</div>
+          <div class="sk">Interaction Design</div><div class="sk">Persona Development</div>
+          <div class="sk">Python · R · Matlab</div><div class="sk">NPS Metrics</div>
+        </div>
+      </div>
+      <a href="mailto:nidaanwar78@gmail.com?subject=Resume Request — Nida Anwar" class="res-dl reveal">↓ Request Full Résumé</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="sec-lbl">04 — Contact</div>
+  <h2 class="sec-h">Let's build<br><em>something meaningful</em></h2>
+  <div class="con-grid">
+    <div class="reveal">
+      <p class="con-intro">I'm actively looking for my next role in <strong>UX Research, UX Design, or Neurotechnology</strong> — and I'd genuinely love to hear from you.</p>
+      <div>
+        <a class="con-link" href="mailto:nidaanwar78@gmail.com"><span class="con-lbl">Email</span><span class="con-val">nidaanwar78@gmail.com</span></a>
+        <a class="con-link" href="https://linkedin.com/in/syedaanwar" target="_blank" rel="noopener"><span class="con-lbl">LinkedIn</span><span class="con-val">linkedin.com/in/syedaanwar</span></a>
+        <a class="con-link" href="#"><span class="con-lbl">Location</span><span class="con-val">Vancouver, BC 🏔</span></a>
+        <a class="con-link" href="#"><span class="con-lbl">Open to</span><span class="con-val">Full-time · Contract · Research Collab</span></a>
+      </div>
+    </div>
+    <div class="reveal rd1">
+      <form class="con-form" onsubmit="handleForm(event)">
+        <div class="ff"><label>Your Name</label><input type="text" placeholder="Jane Smith" required></div>
+        <div class="ff"><label>Email</label><input type="email" placeholder="jane@company.com" required></div>
+        <div class="ff"><label>Message</label><textarea placeholder="Tell me about the role or project you have in mind..." required></textarea></div>
+        <button type="submit" class="con-btn" id="con-btn">Send Message →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-sig">Nida Anwar</div>
+  <div class="f-copy">© 2026 · Vancouver, BC · UX Research & Design</div>
+</footer>
+
+<script>
+// CURSOR
+const cur=document.getElementById('cursor'),trail=document.getElementById('cursorTrail');
+let mx=0,my=0,tx=0,ty=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.transform=`translate(${mx-4}px,${my-4}px)`});
+(function anim(){tx+=(mx-tx)*0.1;ty+=(my-ty)*0.1;trail.style.transform=`translate(${tx-14}px,${ty-14}px)`;requestAnimationFrame(anim)})();
+document.querySelectorAll('a,button,input,textarea').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'))});
+
+// NEURAL CANVAS
+(function(){
+  const c=document.getElementById('neural-canvas'),ctx=c.getContext('2d');
+  let W,H,ns=[];
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  function init(){ns=[];const n=Math.floor(W*H/20000);for(let i=0;i<n;i++)ns.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,r:Math.random()*1.4+.4})}
+  resize();init();window.addEventListener('resize',()=>{resize();init()});
+  (function draw(){
+    ctx.clearRect(0,0,W,H);
+    ns.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle='#2c4a3e';ctx.fill()});
+    for(let i=0;i<ns.length;i++)for(let j=i+1;j<ns.length;j++){const dx=ns[i].x-ns[j].x,dy=ns[i].y-ns[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<110){ctx.beginPath();ctx.moveTo(ns[i].x,ns[i].y);ctx.lineTo(ns[j].x,ns[j].y);ctx.strokeStyle=`rgba(44,74,62,${(1-d/110)*.5})`;ctx.lineWidth=.5;ctx.stroke()}}
+    requestAnimationFrame(draw);
+  })();
+})();
+
+// SCROLL REVEAL
+const io=new IntersectionObserver(entries=>entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*70)}),{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// PANELS
+const kabamOk={v:false};
+function togglePanel(id){
+  const p=document.getElementById('panel-'+id),open=p.classList.contains('open');
+  document.querySelectorAll('.case-panel').forEach(x=>x.classList.remove('open'));
+  if(!open){p.classList.add('open');setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'start'}),60)}
+}
+function closePanel(id){document.getElementById('panel-'+id).classList.remove('open')}
+function handleKabam(){kabamOk.v?togglePanel('kabam'):openPw()}
+
+// PASSWORD
+function openPw(){document.getElementById('pw-ov').style.display='flex';setTimeout(()=>document.getElementById('pw-inp').focus(),120)}
+function closePw(){document.getElementById('pw-ov').style.display='none';document.getElementById('pw-inp').value='';document.getElementById('pw-err').style.opacity='0'}
+function checkPw(){
+  // Change 'kabam2026' to your chosen password
+  if(document.getElementById('pw-inp').value==='kabam2026'){kabamOk.v=true;closePw();togglePanel('kabam')}
+  else{document.getElementById('pw-err').style.opacity='1';document.getElementById('pw-inp').value='';document.getElementById('pw-inp').focus()}
+}
+document.addEventListener('keydown',e=>{if(document.getElementById('pw-ov').style.display==='flex'){if(e.key==='Enter')checkPw();if(e.key==='Escape')closePw()}});
+
+// FORM
+function handleForm(e){e.preventDefault();const b=document.getElementById('con-btn');b.textContent='Sent ✓';b.style.background='var(--forest)';b.style.borderColor='var(--forest)';b.disabled=true}
+</script>
+</body>
+</html>
